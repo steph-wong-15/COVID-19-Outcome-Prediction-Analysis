@@ -482,9 +482,9 @@ for case in location_df.groupby('Country_Region')['Case_Fatality_Ratio'].mean():
 # print("Outliers in case fatality ratio: " , location_case_outliers)
 
 #1.6 Joining the cases and location dataset
-train_df = pd.read_csv("../data/cases_2021_train.csv")
-test_df = pd.read_csv("../data/cases_2021_test.csv")
-location_df = pd.read_csv("../data/location_2021.csv")
+#train_df = pd.read_csv("../data/cases_2021_train.csv")
+#test_df = pd.read_csv("../data/cases_2021_test.csv")
+#location_df = pd.read_csv("../data/location_2021.csv")
 
 #make names consistent between datasets
 location_df['Country_Region'].replace({'US': 'United States', 'Korea, South': 'South Korea', 'Taiwan*': 'Taiwan'}, inplace=True)
