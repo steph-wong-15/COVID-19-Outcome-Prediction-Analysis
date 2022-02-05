@@ -1,2 +1,0 @@
-# cmpt459-project
-
