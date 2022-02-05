@@ -109,6 +109,20 @@ for age in train_age_col:
 
 train_df.drop(train_df[train_df['sex'].isnull()].index.tolist(),inplace=True)
 
+prov_null = train_df[train_df['province'].isnull()].index.tolist()
+for i in prov_null:
+
+    new_df = train_df[(train_df['country']== train_df.loc[i][3]) 
+    & (train_df['province'].notnull())].index.tolist()
+
+    for k in new_df:
+        if train_df.loc[k][3] ==  train_df.loc[i][3]:
+            lat_value = int(train_df.loc[k][4]) - int(train_df.loc[i][4])
+            long_value = int(train_df.loc[k][5]) - int(train_df.loc[i][5])
+            if((abs(lat_value) <=1 or abs(long_value) >= 1) or (abs(lat_value) >=1 or abs(long_value) <= 1 )):
+                train_df.loc[i,'province'] = train_df.loc[k][2]
+                break
+
 train_df['province'].fillna('Unknown',inplace=True)
 train_df['country'].fillna('Unknown',inplace=True)
 train_df['date_confirmation'].fillna('Unknown',inplace=True)
@@ -169,6 +183,20 @@ for age in test_age_col:
 
 
 test_df.drop(test_df[test_df['sex'].isnull()].index.tolist(),inplace=True)
+
+test_prov_null = test_df[test_df['province'].isnull()].index.tolist()
+for i in test_prov_null:
+
+    test_new_df = test_df[(test_df['country']== test_df.loc[i][3]) 
+    & (test_df['province'].notnull())].index.tolist()
+
+    for k in test_new_df:
+        if test_df.loc[k][3] ==  test_df.loc[i][3]:
+            lat_value = int(test_df.loc[k][4]) - int(test_df.loc[i][4])
+            long_value = int(test_df.loc[k][5]) - int(test_df.loc[i][5])
+            if((abs(lat_value) <=1 or abs(long_value) >= 1) or (abs(lat_value) >=1 or abs(long_value) <= 1 )):
+                test_df.loc[i,'province'] = test_df.loc[k][2]
+                break
 
 test_df['province'].fillna('Unknown',inplace=True)
 test_df['country'].fillna('Unknown',inplace=True)
