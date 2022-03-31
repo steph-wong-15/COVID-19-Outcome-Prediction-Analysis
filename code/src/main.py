@@ -1,3 +1,4 @@
+from pickle import FALSE, TRUE
 import pandas as pd
 import numpy as np
 #from skfeature.function.similarity_based import fisher_score
@@ -32,7 +33,6 @@ conditions = [
     ,
       (train_df['outcome'] == 'Dead')
     | (train_df['outcome'] == 'Death')
-    | (train_df['outcome'] == 'Stable')
     | (train_df['outcome'] == 'Deceased')
     | (train_df['outcome'] == 'Died')
     | (train_df['outcome'] == 'death')  
@@ -57,7 +57,7 @@ train_df.drop(columns=['outcome'],inplace=True)
 
 
 #train data
-train_df = pd.read_csv('../data/cases_2021_train.csv')
+# train_df = pd.read_csv('../data/cases_2021_train.csv')
 
 #remove rows with missing age values
 train_df = train_df.dropna(subset=['age'])
@@ -511,7 +511,7 @@ print('Test Number of Cases: ', cases_test.shape[0])
 #1.7 Feature selection
 
 #y = cases_train['outcome'].to_numpy()
-#X = cases_train.copy()
+#X = cases_train
 #X.drop(columns=['outcome','outcome_group'])
 #X = X.to_numpy()
 #score = fisher_score.fisher_score(X, y, mode='rank') 
@@ -526,4 +526,39 @@ train_features.to_csv("../results/cases_2021_train_processed_features.csv")
 test_features.to_csv("../results/cases_2021_test_processed_features.csv")
 
 
-    
+
+#----------Final Milestone---------------------
+# Task 1.1
+train_df.drop(columns=['additional_information','source'],inplace=True)
+test_df.drop(columns=['additional_information','source'],inplace=True)
+
+# Task 1.2
+
+train_df['sex'].replace(['female','male'],[0,1], inplace=True)
+train_df['chronic_disease_binary'].replace([False,True],[0,1], inplace=True)
+train_df['outcome_group'].replace(['deceased','hospitalized','nonhospitalized','recovered'],[0,1,2,3], inplace=True)
+
+test_df['sex'].replace(['female','male'],[0,1], inplace=True)
+test_df['chronic_disease_binary'].replace([False,True],[0,1], inplace=True)
+test_df['outcome_group'].replace(['deceased','hospitalized','nonhospitalized','recovered'],[0,1,2,3], inplace=True)
+
+
+
+# Task 1.3
+# print(train_df['outcome_group'].value_counts())
+
+# Sample equal number of rows for each class
+
+deceased_df = train_df.loc[train_df['outcome_group'] == 0].sample(n=5621,replace=True,random_state=0)
+hospitalized_df = train_df.loc[train_df['outcome_group'] == 1].sample(n=5624,random_state=1)
+nonhospitalized_df = train_df.loc[train_df['outcome_group'] == 2].sample(n=5621,replace=True,random_state=2)
+recovered_df = train_df.loc[train_df['outcome_group'] == 3].sample(n=5621,replace=True,random_state=3)
+
+# Put together
+new_train_df = pd.concat([deceased_df,hospitalized_df,nonhospitalized_df,recovered_df])
+train_df = new_train_df
+
+
+# print(train_df['outcome_group'].value_counts())
+# train_df.to_csv("../data/train_results.csv")
+# test_df.to_csv("../data/test_results.csv")
