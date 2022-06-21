@@ -1,1 +1,1 @@
-# COVID-19-Outcome-Prediction-Analysis
+# COVID-19 Outcome Prediction Analysis
